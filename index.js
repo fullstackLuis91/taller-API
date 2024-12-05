@@ -1,10 +1,16 @@
 const express = require("express");
 const app = express();
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
+const mongoose = require("mongoose");
+const { MONGO_URI } = require("./config/keys");
+const swaggerUI = require('swagger-ui-express')
+const docs = require('./docs/index')
 const { dbConnection } = require("./config/config")
-
 app.use(express.json())
 
 dbConnection()
+// // app.use("/tasks", require("./routes/tasks"));  
 
-app.listen(PORT, ()=> console.log(`Server started on port ${PORT}`));
+app.use('/api-docs', swaggerUI.serve,swaggerUI.setup(docs));
+
+app.listen(PORT, () => console.log("Servidor levantado en el puerto" + 8080));
